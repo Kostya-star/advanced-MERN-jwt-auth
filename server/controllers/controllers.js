@@ -26,9 +26,11 @@ const logout = async (req, res, next) => {
 }
 const activate = async (req, res, next) => {
   try {
-    
+    const activationLink = req.params.link
+    await userService.activate(activationLink)
+    res.redirect(process.env.CLIENT_URL)
   } catch (error) {
-    
+    console.log(error);
   }
 }
 const refreshToken = async (req, res, next) => {

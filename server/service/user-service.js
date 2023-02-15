@@ -23,6 +23,16 @@ const registration = async (email, password) => {
   return { ...tokens, user: userDto }
 }
 
+const activate = async (activationLink) => {
+  const user = await UserModel.findOne({ activationLink })
+  if(!user) {
+    throw Error('Wrong activation link')
+  }
+  user.isActivated = true
+  await user.save()
+}
+
 module.exports = {
-  registration
+  registration,
+  activate
 }

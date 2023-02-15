@@ -1,0 +1,28 @@
+const UserModel = require('../models/user-model')
+const bcrypt = require('bcrypt')
+const uuid = require('uuid')
+const mailService = require('./mail-service')
+const tokenService = require('./token-service')
+const createUserDTO = require('../dtos/user-dto')
+
+const registration = async (email, password) => {
+  const candidate = await UserModel.findOne({ email })
+  if (candidate) {
+    throw Error(`Email ${email} is already registered`)
+  }
+  const hashedPassword = await bcrypt.hash(password, 3)
+  const activationLink = uuid.v4()
+
+  const user = await UserModel.create({ email, password: hashedPassword, activationLink })
+  await mailService.sendActivationMail(email, `${process.env.API_URL}/api/activate/${activationLink}`)
+
+  const userDto = createUserDTO(user)
+  const tokens = tokenService.generateTokens({ ...userDto })
+  await tokenService.saveToken(userDto.id, tokens.refreshToken)
+
+  return { ...tokens, user: userDto }
+}
+
+module.exports = {
+  registration
+}

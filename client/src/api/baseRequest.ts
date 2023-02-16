@@ -1,0 +1,1 @@
+export const baseRequest = 'http://localhost:5000/api'

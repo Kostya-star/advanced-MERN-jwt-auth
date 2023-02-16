@@ -1,7 +1,7 @@
-import { instance } from '..';
-import { IUser } from './../../types/IUser';
 import { AxiosResponse } from 'axios';
+import { instance } from '../instance';
+import { IUser } from './../../types/IUser';
 
 export const fetchUsers = async (): Promise<AxiosResponse<IUser[]>> => {
-  return await instance.get<IUser[]>('/users')
-}
+  return await instance.get<IUser[]>('/users');
+};

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { login, registration } from '../store/slices/authSlice';
 import { store } from './../store/store';
 
 export const LoginForm = () => {
@@ -20,8 +21,8 @@ export const LoginForm = () => {
         value={password}
         placeholder='Password'
       />
-      <button onClick={() => store.registration(email, password)}>Sign Up</button>
-      <button onClick={() => store.login(email, password)}>Log in</button>
+      <button onClick={() => registration(email, password)}>Sign Up</button>
+      <button onClick={() => login(email, password)}>Log in</button>
     </div>
   );
 };

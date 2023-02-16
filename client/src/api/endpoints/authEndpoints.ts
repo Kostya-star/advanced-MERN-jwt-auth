@@ -1,6 +1,6 @@
-import { instance } from '../index';
 import { AxiosResponse } from 'axios';
 import { IAuthResponse } from '../../types/responses/IAuthResponse';
+import { instance } from '../instance';
 
 const registration = async (
   email: string,
@@ -23,5 +23,5 @@ const logout = async (): Promise<void> => {
 export const authEndpoints = {
   registration,
   login,
-  logout
-}
+  logout,
+};

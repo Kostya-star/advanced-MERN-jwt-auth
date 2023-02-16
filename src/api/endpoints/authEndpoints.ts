@@ -1,0 +1,21 @@
+import { instance } from '../index';
+import { AxiosResponse } from 'axios';
+import { IAuthResponse } from '../../types/responses/IAuthResponse';
+
+export const registration = async (
+  email: string,
+  password: string,
+): Promise<AxiosResponse<IAuthResponse>> => {
+  return instance.post<IAuthResponse>('/registration', { email, password });
+};
+
+export const login = async (
+  email: string,
+  password: string,
+): Promise<AxiosResponse<IAuthResponse>> => {
+  return instance.post<IAuthResponse>('/login', { email, password });
+};
+
+export const logout = async (): Promise<void> => {
+  return instance.post('/logout');
+};

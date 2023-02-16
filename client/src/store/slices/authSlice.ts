@@ -8,13 +8,15 @@ import { baseRequest } from './../../api/baseRequest';
 import { AppDispatch } from '../store';
 
 export interface AuthState {
-  isAuth: boolean;
-  user: IUser;
+  isAuth: boolean
+  user: IUser
+  isLoading: boolean
 }
 
 const initialState: AuthState = {
   isAuth: false,
   user: { email: '', id: '', isActivated: false },
+  isLoading: false
 };
 
 export const authSlice = createSlice({
@@ -26,11 +28,14 @@ export const authSlice = createSlice({
     },
     setUser: (state, action: PayloadAction<IUser>) => {
       state.user = action.payload
+    },
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload
     }
   },
 });
 
-export const { setAuth, setUser } = authSlice.actions;
+export const { setAuth, setUser, setLoading } = authSlice.actions;
 
 export default authSlice.reducer;
 
@@ -51,7 +56,7 @@ export const registration = (email: string, password: string) => async (dispatch
 export const login = (email: string, password: string) => async (dispatch: AppDispatch) => {
   try {
     const resp = await authEndpoints.login(email, password);
-    localStorage.setItem('token', JSON.stringify(resp.data.accessToken));
+    localStorage.setItem('token', resp.data.accessToken);
     dispatch(setAuth(true))
     dispatch(setUser(resp.data.user))
     console.log(resp);
@@ -72,6 +77,7 @@ export const logout = () => async (dispatch: AppDispatch) => {
 };
 
 export const checkAuth = () => async (dispatch: AppDispatch) => {
+  dispatch(setLoading(true))
   try {
     const resp = await axios.get<IAuthResponse>(`${baseRequest}/refresh`, { withCredentials: true })
     localStorage.setItem('token', JSON.stringify(resp.data.accessToken));
@@ -80,6 +86,7 @@ export const checkAuth = () => async (dispatch: AppDispatch) => {
     console.log(resp);
   } catch (error) {
     console.log(error);
+  } finally {
+    dispatch(setLoading(false))
   }
 }
-

@@ -5,6 +5,7 @@ import { authEndpoints } from './../../api/endpoints/authEndpoints';
 import axios from 'axios'
 import { IAuthResponse } from './../../types/responses/IAuthResponse';
 import { baseRequest } from './../../api/baseRequest';
+import { AppDispatch } from '../store';
 
 export interface AuthState {
   isAuth: boolean;
@@ -33,47 +34,49 @@ export const { setAuth, setUser } = authSlice.actions;
 
 export default authSlice.reducer;
 
-export const registration = async (email: string, password: string) => {
+export const registration = (email: string, password: string) => async (dispatch: AppDispatch) => {
   try {
+    console.log(email, password);
+
     const resp = await authEndpoints.registration(email, password);
     localStorage.setItem('token', JSON.stringify(resp.data.accessToken));
-    setAuth(true);
-    setUser(resp.data.user);
+    dispatch(setAuth(true));
+    dispatch(setUser(resp.data.user))
     console.log(resp);
   } catch (error) {
     console.log(error);
   }
 };
 
-export const login = async (email: string, password: string) => {
+export const login = (email: string, password: string) => async (dispatch: AppDispatch) => {
   try {
     const resp = await authEndpoints.login(email, password);
     localStorage.setItem('token', JSON.stringify(resp.data.accessToken));
-    setAuth(true);
-    setUser(resp.data.user);
+    dispatch(setAuth(true))
+    dispatch(setUser(resp.data.user))
     console.log(resp);
   } catch (error) {
     console.log(error);
   }
 };
 
-export const logout = async () => {
+export const logout = () => async (dispatch: AppDispatch) => {
   try {
     await authEndpoints.logout();
     localStorage.removeItem('token');
-    setAuth(false);
-    setUser({} as IUser);
+    dispatch(setAuth(false))
+    dispatch(setUser({} as IUser))
   } catch (error) {
     console.log(error);
   }
 };
 
-export const checkAuth = async () => {
+export const checkAuth = () => async (dispatch: AppDispatch) => {
   try {
     const resp = await axios.get<IAuthResponse>(`${baseRequest}/refresh`, { withCredentials: true })
     localStorage.setItem('token', JSON.stringify(resp.data.accessToken));
-    setAuth(true);
-    setUser(resp.data.user);
+    dispatch(setAuth(true))
+    dispatch(setUser(resp.data.user))
     console.log(resp);
   } catch (error) {
     console.log(error);

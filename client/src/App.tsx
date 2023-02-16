@@ -1,12 +1,10 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 import { LoginForm } from "./components/LoginForm";
-import { checkAuth } from "./store/slices/authSlice";
-import { RootState, store, useAppDispatch, useAppSelector } from './store/store';
+import { useAppDispatch, useAppSelector } from "./store/hooks";
+import { checkAuth, login, registration } from "./store/slices/authSlice";
 
 
 const App = () => {
-
   const { isAuth, user } = useAppSelector(({ auth }) => ({
     isAuth: auth.isAuth,
     user: auth.user
@@ -15,15 +13,24 @@ const App = () => {
 
   useEffect(() => {
     if(localStorage.getItem('token')) {
-      checkAuth()
+      dispatch(checkAuth())
     }
   }, [])
-  console.log(store.isAuth);
+  console.log(isAuth);
+
+  const onLogin = (email: string, password: string) => {
+    dispatch(login(email, password))
+  }
+
+  const onRegistration = (email: string, password: string) => {
+    dispatch(registration(email, password))
+  }
+
   
   return (
     <div>
-      <h1>{ isAuth ? `The user is authenticated: ${store.user.email}` : 'Please, authenticate first!' }</h1>
-      <LoginForm/>
+      <h1>{ isAuth ? `The user is authenticated: ${user.email}` : 'Please, authenticate first!' }</h1>
+      <LoginForm onLogin={onLogin} onRegistration={onRegistration}/>
     </div>
   );
 }

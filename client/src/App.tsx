@@ -58,11 +58,12 @@ const App = () => {
       {isAuth && (
         <>
           <h1>{`The user is authenticated: ${user.email}`}</h1>
+          <h1>{user.isActivated ? 'The email is successfully activated' : 'Please, go to your email and activate the account'}</h1>
           <button onClick={() => dispatch(logout())}>Log out</button>
           <button onClick={getAllUsers}>Get all users</button>
           {
             users?.map(user => (
-              <p key={user.id}>User Email: {user.email}</p>
+              <p key={user.email}>User Email: {user.email}</p>
             ))
           }
         </>

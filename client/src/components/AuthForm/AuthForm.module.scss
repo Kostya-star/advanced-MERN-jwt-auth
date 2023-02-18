@@ -1,0 +1,39 @@
+.container {
+  .navigate__buttons {
+    display: flex;
+    // justify-content: space-around;
+    margin-bottom: 20px;
+    button {
+      border: none;
+      padding: 10px;
+      background-color: transparent;
+      margin-right: 20px;
+      border-radius: 5px;
+      font-weight: 600;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .active {
+      text-decoration: underline;
+      font-weight: 800;
+      font-size: 20px;
+    }
+  }
+  form {
+    input {
+      display: block;
+      padding: 10px;
+      width: 400px;
+      margin-bottom: 30px;
+      border-radius: 5px;
+      font-size: 20px;
+    }
+    .submit__buttons {
+      display: flex;
+      justify-content: space-between;
+      button {
+        width: 100%;
+      }
+    }
+  }
+}
